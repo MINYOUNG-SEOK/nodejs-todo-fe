@@ -24,7 +24,6 @@ function App() {
         isComplete: false,
       });
       if (response.status === 200) {
-        console.log("할 일 추가 성공");
         setTodoValue("");
         getTasks();
       } else {
@@ -32,6 +31,7 @@ function App() {
       }
     } catch (err) {
       console.error("할일 추가 실패", err);
+      setTodoList([]);
     }
   };
 
