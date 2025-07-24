@@ -1,20 +1,41 @@
-import React from "react";
-import { Col, Row } from "react-bootstrap";
-
-const TodoItem = () => {
+const TodoItem = ({ item, onDelete, onComplete }) => {
   return (
-    <Row>
-      <Col xs={12}>
-        <div className={`todo-item`}>
-          <div className="todo-content">밥먹기</div>
+    <div className={`todo-item ${item.isComplete ? "completed" : ""}`}>
+      <div className="todo-checkbox-container">
+        <input
+          type="checkbox"
+          id={`todo-${item._id}`}
+          checked={item.isComplete}
+          onChange={() => onComplete(item._id, item.isComplete)}
+          className="todo-checkbox"
+        />
+        <label htmlFor={`todo-${item._id}`} className="checkbox-label"></label>
+      </div>
 
-          <div>
-            <button className="button-delete">삭제</button>
-            <button className="button-delete">끝남</button>
-          </div>
-        </div>
-      </Col>
-    </Row>
+      <div className="todo-content">
+        <label
+          htmlFor={`todo-${item._id}`}
+          className={`todo-text ${item.isComplete ? "completed-text" : ""}`}
+        >
+          {item.task}
+        </label>
+        {item.createdAt && (
+          <p className="todo-date">
+            {new Date(item.createdAt).toLocaleString("ko-KR")}
+          </p>
+        )}
+      </div>
+
+      <div className="todo-actions">
+        <button
+          onClick={() => onDelete(item._id)}
+          className="action-button delete-button"
+          title="삭제"
+        >
+          <img src="/icon_trash.svg" alt="삭제" width="18" />
+        </button>
+      </div>
+    </div>
   );
 };
 
