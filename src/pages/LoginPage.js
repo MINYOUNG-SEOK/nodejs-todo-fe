@@ -1,7 +1,13 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import api, { login } from "../utils/api";
+import axios from "axios";
+import api from "../utils/api";
 import "../App.css";
+
+async function login({ email, password }) {
+  const response = await axios.post("/api/user/login", { email, password });
+  return response;
+}
 
 function LoginPage() {
   const [email, setEmail] = useState("");

@@ -1,10 +1,25 @@
-import { useState, useCallback } from "react";
+import React, { useState, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
-import { register } from "../utils/api";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "../App.css";
 import axios from "axios";
+
+// 회원가입 API 호출 함수
+async function register({ email, name, password }) {
+  const response = await axios.post("/api/user/join", {
+    email,
+    name,
+    password,
+  });
+  return response;
+}
+
+// 이메일 중복 확인 API 호출 함수
+async function checkEmail({ email }) {
+  const response = await axios.post("/api/user/check-email", { email });
+  return response;
+}
 
 function RegisterPage() {
   const [email, setEmail] = useState("");

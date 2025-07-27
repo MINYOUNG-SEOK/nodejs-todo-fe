@@ -31,19 +31,4 @@ api.interceptors.response.use(
   }
 );
 
-export async function login({ email, password }) {
-  const response = await api.post("/user/login", { email, password });
-  return response;
-}
-
-export async function register({ email, name, password }) {
-  const response = await api.post("/user/join", { email, name, password });
-  return response;
-}
-
-export async function checkEmail({ email }) {
-  const response = await api.post("/user/check-email", { email });
-  return response;
-}
-
 export default api;
