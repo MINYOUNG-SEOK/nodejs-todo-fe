@@ -1,1 +1,2 @@
 /api/* https://nodejs-todo-list-7fa4eda11992.herokuapp.com/api/:splat 200
+/* /index.html 200

@@ -48,7 +48,32 @@ function LoginPage() {
         navigate("/todo");
       }
     } catch (err) {
-      setError(err.message);
+      console.error("로그인 실패:", err);
+
+      if (err.response) {
+        const statusCode = err.response.status;
+        const errorMessageFromServer = err.response.data.message;
+
+        if (statusCode === 400) {
+          setError(
+            errorMessageFromServer ||
+              "이메일 또는 비밀번호가 올바르지 않습니다."
+          );
+        } else if (statusCode === 401) {
+          setError(
+            errorMessageFromServer ||
+              "이메일 또는 비밀번호가 일치하지 않습니다."
+          );
+        } else if (statusCode === 404) {
+          setError("로그인 서버에 연결할 수 없습니다. 관리자에게 문의하세요.");
+        } else {
+          setError(`로그인 요청 중 오류가 발생했습니다: ${statusCode}`);
+        }
+      } else if (err.request) {
+        setError("서버에 연결할 수 없습니다. 네트워크 상태를 확인해주세요.");
+      } else {
+        setError("알 수 없는 오류가 발생했습니다. 다시 시도해주세요.");
+      }
     } finally {
       setIsSubmitting(false);
     }
