@@ -265,7 +265,13 @@ body {
   font-size: 0.75rem;
   color: #999;
   margin: 0.25rem 0 !important;
+}
 
+.todo-author {
+  font-size: 0.75rem;
+  color: #999;
+  margin: 0.25rem 0 !important;
+  font-weight: 500;
 }
 
 .todo-actions {

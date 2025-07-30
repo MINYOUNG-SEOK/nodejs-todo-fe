@@ -24,6 +24,9 @@ const TodoItem = ({ item, onDelete, onComplete }) => {
             {new Date(item.createdAt).toLocaleString("ko-KR")}
           </p>
         )}
+        {item.author && item.author.name && (
+          <p className="todo-author">작성자: {item.author.name}</p>
+        )}
       </div>
 
       <div className="todo-actions">
