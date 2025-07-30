@@ -1,6 +1,6 @@
 import TodoItem from "./TodoItem";
 
-const TodoBoard = ({ todoList, onDelete, onComplete, filter }) => {
+const TodoBoard = ({ todoList, onDelete, onComplete, filter, currentUser }) => {
   return (
     <div className="todo-board-section">
       <div className="card">
@@ -38,6 +38,7 @@ const TodoBoard = ({ todoList, onDelete, onComplete, filter }) => {
                   item={item}
                   onDelete={onDelete}
                   onComplete={onComplete}
+                  currentUser={currentUser}
                 />
               ))}
             </div>

@@ -248,6 +248,12 @@ body {
   min-width: 0;
 }
 
+.todo-meta {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
 .todo-text {
   display: block;
   cursor: pointer;
@@ -264,13 +270,19 @@ body {
 .todo-date {
   font-size: 0.75rem;
   color: #999;
-  margin: 0.25rem 0 !important;
+  margin: 0 !important;
 }
 
 .todo-author {
   font-size: 0.75rem;
   color: #999;
-  margin: 0.25rem 0 !important;
+  margin: 0 !important;
+  font-weight: 500;
+}
+
+.todo-separator {
+  font-size: 0.75rem;
+  color: #999;
   font-weight: 500;
 }
 

@@ -10,6 +10,7 @@ function TodoPage({ setUser }) {
   const [todoValue, setTodoValue] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [filter, setFilter] = useState("all");
+  const [currentUser, setCurrentUser] = useState(null);
 
   const navigate = useNavigate();
 
@@ -17,7 +18,17 @@ function TodoPage({ setUser }) {
     sessionStorage.removeItem("token");
     api.defaults.headers["authorization"] = "";
     setUser(null);
+    setCurrentUser(null);
     navigate("/login", { replace: true });
+  };
+
+  const getCurrentUser = async () => {
+    try {
+      const response = await api.get("/user/me");
+      setCurrentUser(response.data.user);
+    } catch (err) {
+      console.error("사용자 정보 조회 실패", err);
+    }
   };
 
   const getTasks = async () => {
@@ -53,6 +64,12 @@ function TodoPage({ setUser }) {
       await getTasks();
     } catch (err) {
       console.error("삭제 실패", err);
+      // 에러 메시지를 사용자에게 표시
+      if (err.message) {
+        alert(`삭제 실패: ${err.message}`);
+      } else {
+        alert("삭제에 실패했습니다.");
+      }
     }
   };
 
@@ -74,6 +91,7 @@ function TodoPage({ setUser }) {
 
   useEffect(() => {
     getTasks();
+    getCurrentUser();
   }, []);
 
   const completedCount = todoList.filter((t) => t.isComplete).length;
@@ -190,6 +208,7 @@ function TodoPage({ setUser }) {
           onDelete={deleteTask}
           onComplete={completeTask}
           filter={filter}
+          currentUser={currentUser}
         />
       </div>
     </div>

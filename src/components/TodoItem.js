@@ -1,4 +1,20 @@
-const TodoItem = ({ item, onDelete, onComplete }) => {
+const TodoItem = ({ item, onDelete, onComplete, currentUser }) => {
+  const isAuthor =
+    currentUser &&
+    item.author &&
+    (currentUser._id === item.author._id || currentUser._id === item.author);
+
+  const handleDeleteClick = () => {
+    if (isAuthor) {
+      const isConfirmed = window.confirm("정말로 이 할일을 삭제하시겠습니까?");
+      if (isConfirmed) {
+        onDelete(item._id);
+      }
+    } else {
+      alert("다른 사람이 작성한 할일은 삭제할 수 없습니다.");
+    }
+  };
+
   return (
     <div className={`todo-item ${item.isComplete ? "completed" : ""}`}>
       <div className="todo-checkbox-container">
@@ -19,19 +35,24 @@ const TodoItem = ({ item, onDelete, onComplete }) => {
         >
           {item.task}
         </label>
-        {item.createdAt && (
-          <p className="todo-date">
-            {new Date(item.createdAt).toLocaleString("ko-KR")}
-          </p>
-        )}
-        {item.author && item.author.name && (
-          <p className="todo-author">작성자: {item.author.name}</p>
-        )}
+        <div className="todo-meta">
+          {item.author && item.author.name && (
+            <p className="todo-author">작성자: {item.author.name}</p>
+          )}
+          {item.author && item.author.name && item.createdAt && (
+            <span className="todo-separator">|</span>
+          )}
+          {item.createdAt && (
+            <p className="todo-date">
+              {new Date(item.createdAt).toLocaleString("ko-KR")}
+            </p>
+          )}
+        </div>
       </div>
 
       <div className="todo-actions">
         <button
-          onClick={() => onDelete(item._id)}
+          onClick={handleDeleteClick}
           className="action-button delete-button"
           title="삭제"
         >
