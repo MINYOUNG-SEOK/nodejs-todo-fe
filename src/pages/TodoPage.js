@@ -97,11 +97,15 @@ function TodoPage({ setUser }) {
   const completedCount = todoList.filter((t) => t.isComplete).length;
   const totalCount = todoList.length;
 
-  const filteredTodos = todoList.filter((todo) => {
-    if (filter === "active") return !todo.isComplete;
-    if (filter === "completed") return todo.isComplete;
-    return true;
-  });
+  const filteredTodos = todoList
+    .filter((todo) => {
+      if (filter === "active") return !todo.isComplete;
+      if (filter === "completed") return todo.isComplete;
+      return true;
+    })
+    .sort((a, b) => {
+      return new Date(b.createdAt) - new Date(a.createdAt);
+    });
 
   return (
     <div className="app-container">
