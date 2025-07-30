@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -33,14 +33,23 @@ function RegisterPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const navigate = useNavigate();
 
-  let debounceTimer = null;
+  const [debounceTimer, setDebounceTimer] = useState(null);
+
+  // 컴포넌트 언마운트 시 타이머 정리
+  useEffect(() => {
+    return () => {
+      if (debounceTimer) {
+        clearTimeout(debounceTimer);
+      }
+    };
+  }, [debounceTimer]);
 
   const checkEmailDuplication = useCallback(() => {
     if (debounceTimer) {
       clearTimeout(debounceTimer);
     }
 
-    debounceTimer = setTimeout(async () => {
+    const timer = setTimeout(async () => {
       try {
         if (!email.trim()) {
           toast.warn("이메일을 입력하세요.");
@@ -68,6 +77,7 @@ function RegisterPage() {
         setIsCheckingEmail(false);
       }
     }, 300);
+    setDebounceTimer(timer);
   }, [email]);
 
   const handleRegister = async () => {

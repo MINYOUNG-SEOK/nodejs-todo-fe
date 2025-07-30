@@ -322,6 +322,46 @@ body {
   color: #999;
 }
 
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem;
+  max-width: 800px;
+  margin: 0 auto;
+  position: relative;
+}
+
+.page-title {
+  font-size: 1.8rem;
+  font-weight: bold;
+  color: #111827;
+}
+
+.logout-box {
+  display: flex;
+  justify-content: flex-end;
+  max-width: 670px;
+  margin: 0 auto;
+  margin-bottom: 10px;
+}
+
+.logout-button {
+  padding: 0.5rem 1rem;
+  background-color: #ef4444;
+  color: white;
+  border: none;
+  border-radius: 0.375rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.logout-button:hover {
+  background-color: #dc2626;
+}
+
 @media (max-width: 640px) {
   .app-container {
     padding: 1rem 0.5rem;

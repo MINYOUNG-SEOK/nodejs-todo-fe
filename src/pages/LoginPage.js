@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Navigate } from "react-router-dom";
 import axios from "axios";
 import api from "../utils/api";
 import "../App.css";
@@ -9,20 +9,19 @@ async function login({ email, password }) {
   return response;
 }
 
-function LoginPage() {
+function LoginPage({ user, setUser }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
-  const [user, setUser] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
     const token = sessionStorage.getItem("token");
-    if (token) {
-      navigate("/todo");
+    if (token && user) {
+      navigate("/");
     }
-  }, [navigate]);
+  }, [user, navigate]);
 
   const handleLogin = async () => {
     if (isSubmitting) {
@@ -39,13 +38,22 @@ function LoginPage() {
 
     try {
       const response = await login({ email: email.toLowerCase(), password });
-      console.log(response);
       if (response.status === 200) {
-        setUser(response.user);
-        sessionStorage.setItem("token", response.data.token);
-        api.defaults.headers["authorization"] = "Bearer " + response.data.token;
+        const token = response.data.token;
+        const userData = response.data.user;
+
+        if (!token) {
+          setError("토큰이 존재하지 않습니다.");
+          return;
+        }
+
+        sessionStorage.setItem("token", token);
+        api.defaults.headers["authorization"] = "Bearer " + token;
+
+        if (userData) setUser(userData);
+
         setError("");
-        navigate("/todo");
+        navigate("/");
       }
     } catch (err) {
       console.error("로그인 실패:", err);
@@ -86,6 +94,10 @@ function LoginPage() {
     }
   };
 
+  // user가 있으면 메인 페이지로 리다이렉트
+  if (user) {
+    return <Navigate to="/" replace />;
+  }
   return (
     <div className="app-container">
       <div className="app-header">

@@ -1,18 +1,32 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import "../App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import TodoBoard from "../components/TodoBoard";
 import api from "../utils/api";
 
-function TodoPage() {
+function TodoPage({ setUser }) {
   const [todoList, setTodoList] = useState([]);
   const [todoValue, setTodoValue] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [filter, setFilter] = useState("all");
 
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    sessionStorage.removeItem("token");
+    api.defaults.headers["authorization"] = "";
+    setUser(null);
+    navigate("/login", { replace: true });
+  };
+
   const getTasks = async () => {
-    const response = await api.get("/tasks");
-    setTodoList(response.data.data);
+    try {
+      const response = await api.get("/tasks");
+      setTodoList(response.data.data);
+    } catch (err) {
+      console.error("할일 목록 조회 실패", err);
+    }
   };
 
   const addTask = async () => {
@@ -23,20 +37,20 @@ function TodoPage() {
       });
       if (response.status === 200) {
         setTodoValue("");
-        getTasks();
+        await getTasks();
       } else {
         throw new Error("Task can not be added");
       }
     } catch (err) {
       console.error("할일 추가 실패", err);
-      setTodoList([]);
+      // 에러 발생 시에도 기존 목록은 유지
     }
   };
 
   const deleteTask = async (id) => {
     try {
       await api.delete(`/tasks/${id}`);
-      getTasks();
+      await getTasks();
     } catch (err) {
       console.error("삭제 실패", err);
     }
@@ -45,7 +59,7 @@ function TodoPage() {
   const completeTask = async (id, currentStatus) => {
     try {
       await api.put(`/tasks/${id}`, { isComplete: !currentStatus });
-      getTasks();
+      await getTasks();
     } catch (err) {
       console.error("완료 처리 실패", err);
     }
@@ -75,6 +89,11 @@ function TodoPage() {
     <div className="app-container">
       <div className="app-header">
         <h1 className="app-title">할일 관리</h1>
+      </div>
+      <div className="logout-box">
+        <button onClick={handleLogout} className="logout-button">
+          로그아웃
+        </button>
       </div>
 
       <div className="app-content">
